@@ -30,11 +30,14 @@ const filterCompanies = (companies: Array<CompanyLayout>, distance: number, sear
     // Filter on type first for performance
     let filteredCompanies = companies
     if (searchType === 'advanced' && (storeType === 'For home' || storeType === 'For business')) {
-        filteredCompanies =  filteredCompanies.filter(c => c['Installer Type'] === storeType);
+        filteredCompanies =  filteredCompanies.filter(c => c['Installer Type'] === storeType || c['Installer Type'] === 'For home & business');
     }
 
     // Calculate distance
     filteredCompanies = filteredCompanies.map(c => {
+        console.log({storeType: storeType, type: c['Installer Type']});
+        console.log({lat: parseFloat(String(c['Latitude'])), lon: parseFloat(String(c['Longitude']))});
+        
         const location = {
             lat: parseFloat(String(c['Latitude'])),
             lon: parseFloat(String(c['Longitude']))
@@ -49,7 +52,7 @@ const filterCompanies = (companies: Array<CompanyLayout>, distance: number, sear
 }
 
 export const Filter: React.FC<Props> = ({ onSubmit, loading, companies, searchLocation }) => {
-    const [distance, setDistance] = useState<number>(0.5);
+    const [distance, setDistance] = useState<number>(10);
     const [filteredCompanies, setFilteredCompanies] = useState(companies);
     const [searchType, setSearchType] = useState<'simple' | 'advanced'>('simple');
     const [advDropDownIsOpen, setadvDropDownIsOpen] = useState<boolean>(true);
@@ -65,7 +68,7 @@ export const Filter: React.FC<Props> = ({ onSubmit, loading, companies, searchLo
     return (
         <Card raised className="map-search-box">
             <div className="map-search-box-header">
-                <h1 className="map-search-box-heading">Store Locator</h1>
+                <h1 className="map-search-box-heading">Installer Locator</h1>
                 <p>Information on this page is subject to change without prior notice. Please contact the installer directly for up to date information.</p>
             </div>
             

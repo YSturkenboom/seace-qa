@@ -3,7 +3,8 @@ import './MapScreen.css';
 import { Filter } from './components/MapFilter'
 import { MapLegend } from './components/MapLegend'
 import { MapRegionIndicator } from './components/MapRegionIndicator';
-import { CompanyLayout } from './interfaces'
+import { CompanyLayout } from './interfaces';
+// import GoogleMapReact from 'google-map-react';
 
 const { GoogleSpreadsheet } = require('google-spreadsheet');
  
@@ -34,7 +35,7 @@ function MapScreen() {
       await doc.loadInfo();
       console.log(doc.title);
       const sheet = doc.sheetsByIndex[REGION_TO_SHEET_MAP['uk']]
-      const rows = await sheet.getRows({ limit: 25 });
+      const rows = await sheet.getRows();
       setCompanies(rows);
       console.log(rows);
       
@@ -62,9 +63,15 @@ function MapScreen() {
         src="https://www.google.com/maps/embed/v1/place?key=API_KEY
           &q=Space+Needle,Seattle+WA">
       </iframe> */}
-      <Filter onSubmit={() => {}} loading={loading} companies={companies} searchLocation={searchLocation}/>
-      <MapLegend isOpened={true}/>
-      <MapRegionIndicator region={region}/>
+      {/* <GoogleMapReact
+        bootstrapURLKeys={{ key: 'gme-samsungsds' }}
+        defaultCenter={{lat: 59.95, lng: 30.33}}
+        defaultZoom={11}
+      > */}
+        <Filter onSubmit={() => {}} loading={loading} companies={companies} searchLocation={searchLocation}/>
+        <MapLegend isOpened={true}/>
+        <MapRegionIndicator region={region}/>
+      {/* </GoogleMapReact> */}
     </div>
   );
 }
