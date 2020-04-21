@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "seace-installer-locator",
+  "private_key_id": "5a80e6b026bee1db620f513a7039d7cc5ec42b57",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDcGU3a6RqQ0/o4\nldU4MnKC5r5eT0vz/G4UkNjanh1J7aCE7XSFEPm/4/JlH7n/QKsFTjG7T1HTEFFL\nSo0MZMw03xU53Fa3SSMaesSeDjW52046xCEuUi1xwCwKLNNeJM3mt/2uPrcAHlGY\n58m5hIbxTgIPKE8XIgH0OWdnz0rqfzAmN06+B5RO0XuKEqCMkBLbU/gX8dx2LxUe\nYFTFHsfQYgRsboWFg5pij2RLAxsKWCPvmsFWJqwz8j2K3BDU0meEZAGjBymmdG7J\ngPAsE1pN3uf3JQAt7DgKbx+sYzH4p1bo3O7W8P92ZOrizebaExu5NVI95D3VJpVw\nYLmpZ49zAgMBAAECggEACMRrfki7dEhQ6MDI8WgDsihHg3GKvRlqfudyK+stj7dS\nCXXvGGK8Kr+h2L4HkQF6joCLqQlttmtiT9VbnvsY5tnPJPnjl0jLh7opTxA8uvdR\nSaYzfX6Iu1QEO0zcso6N3ZCNH8wRvITqbvLtmAtxEKIUhOso6LI1w0V8xVJh/Flw\nmm1qBFdzTYxDwcGSVCx/Ifcyu4RXnVIQEMrwqseh3+gCGRlCjqbIu95zzbwDwM8c\ntdQ6N+BQ7c03S646v09mrJwoj7kqXbkh5Vyhx7vuFAPA9nypeGT/f7mcFqJyM/nU\n/6wLTr/mNom67i6t+W8Pt9U33oaBilN/CZQ/AvRkkQKBgQD5jEjQNVnR81tKIVKQ\n0In/S8/OJrqpDybs5oOOrV0nBfa9ThvWNXbuyakREDAcnASl06K9KvdcVRWFNPlT\nMvbtGEsAr2Nu2idPiQXXjHFs6248+OVAOC8GruGT3mkFei/iREjKPfHZw36qJg/Q\nIbIZnZGEJR5V6yNeNjFCqToaWQKBgQDhyhnRB3j1rWMVlv45r96+pZd35d2Z/PKv\n2qWpIE1WQ6BDqjPcfCqV30IfbxlSqbYX7tVDtuqWsYgi4taopfNXgrZVycV/kVlU\nhzK7tfFxQ3JesrCXo7C3bTReypRr9EJXJxM5aEWEUeBuniQzc9yeXbVKIOiBROGO\nIwO/NczmqwKBgQCOYgV1jss16IVQ0Zx7dhEWshnaROzB4xxRlODBOpdo2ZVDw9pM\nKWs3qaYmTzc0S6y3NP6osmg6rW0++M+9MdoDw5WfyXKRYDWHwuWra72X6OiYL2cW\ncjgatxOMPB1t+55wmodxpVBl8I5H5LmnBmLJDMdnP4qEeUpPydnncAjv2QKBgQCP\nauwTFggDJWs2n35D7i4yMsSPZ/bmhQEyKlPnpZj6HmKCGG5wsn3qTLGXfd4734jG\nkvHr3RgNOB8c6bEn1qFHCMQAofVNHmn7gxT6nosKQqk29ZGuAE+Tc048l7jHCZPK\nAAv5/v2JGujP2qtr80BDZ4pr15NX6QTMX/lVTzsjmQKBgARz+2kZTZ2e1jRDZ0aC\npRRKQ87/fhUBxcre70viBhEZekeP89CFX8NDDFBL6fA3i3WhtrpLgNiLX00KFVdw\n/R3/5WQ4XbZWprd0zxZrda1LDI9sRmenTCkMFI2DPNfg7rbtQ4ntJWo0tlozDTWN\nZiYW2ZjJQI1qhy38wkj2ihhO\n-----END PRIVATE KEY-----\n",
+  "client_email": "seace-installer-locator@seace-installer-locator.iam.gserviceaccount.com",
+  "client_id": "117948621124081448583",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/seace-installer-locator%40seace-installer-locator.iam.gserviceaccount.com"
+}

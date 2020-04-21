@@ -1,0 +1,177 @@
+.map-screen {
+  height: 100vh;
+  width: 100vw;
+  background: url('gmapsplaceholder.png') no-repeat center center fixed;
+}
+
+.map-search-box {
+  width: 350px;
+  font-size: 12px;
+  color: black;
+  position: absolute;
+  top: 25px;
+  left: 25px;
+  font-size: 14px;
+}
+
+.map-search-box-header {
+  padding: 25px;
+  padding-bottom: 10px;
+  line-height: 1.5;
+}
+
+.map-search-box-heading {
+  font-size: 26px;
+  font-weight: 800;
+  margin-top: 0;
+  margin-bottom: 25px;
+}
+
+.map-search-box-footer {
+  height: 536px;
+  overflow-y: scroll;
+}
+
+.map-search-box-form {
+  background: grey;
+  color: white;
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.map-search-box-form-searchtype {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 100%;
+  font-weight: 600;
+}
+
+.map-search-box-form-distance {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 100%;
+}
+
+.map-search-box-form-distance > label {
+  margin: 0
+}
+
+.map-search-box-form-search {
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 100%;
+}
+
+.map-search-box-form-search:first-child {
+  width: 100%;
+}
+
+.map-search-box-form-distance-btn {
+  font-size: 12px !important;
+  flex: 1;
+  border-radius: 4px 4px 0 0 !important;
+}
+
+.map-search-box-advanced {
+  border-bottom: 1px gray;
+}
+
+.map-search-location {
+  padding: 25px;
+
+  /* account for scroll bar */
+  padding-right: 15px;
+
+  display: flex;
+}
+
+.map-search-location:nth-child(even) {
+  background: lightgrey;
+}
+
+.map-search-location-info {
+  margin: 0;
+  flex: 4;
+}
+
+.map-search-location-icons {
+  padding-top: 10px;
+  margin: 0;
+  flex: 1;
+}
+
+.map-search-location-icons svg {
+  font-size: 50px;
+}
+
+.map-search-location-info-title {
+  font-weight: 600;
+  font-size: 14;
+}
+
+.btn-active {
+  background: grey !important;
+  color: white !important;
+}
+
+.map-legend {
+  padding: 25px;
+  width: 400px;
+  height: 175px;
+  font-size: 12px;
+  color: black;
+  position: absolute;
+  bottom: 25px;
+  right: 25px;
+  font-size: 14px;
+}
+
+.map-legend-title {
+  margin-top: 0;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.map-legend-icons {
+  display: flex;
+  justify-content: space-around;
+}
+
+.map-legend-icons-block {
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.map-legend-icons svg {
+  font-size: 50px;
+  height: 1em;
+}
+
+.map-legend-icons p {
+  height: 2em;
+}
+
+.map-region {
+  top: 25px;
+  right: 25px;
+  position: absolute;
+  padding: 10px;
+  margin: 0;
+}
