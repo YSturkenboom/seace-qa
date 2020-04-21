@@ -22,7 +22,7 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "build": "node ./config-overrides.js && yarn build:clean",
+    "build": "react-scripts build",
     "build:clean": "cd build && mv static/js/*.js main.js && mv static/css/*.css main.css && rm -r static",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
