@@ -140,7 +140,7 @@ function MapScreen() {
         </MyMapComponent>
         <Filter onSubmit={() => {}} loading={loading} companies={companies} searchLocation={searchLocation} mapRef={mapRef} setActivePlace={setActivePlace}/>
         <MapLegend isOpened={true}/>
-        <MapRegionIndicator region={region}/>
+        <MapRegionIndicator region={region} setRegion={setRegion}/>
       </div>
   );
 }
