@@ -5,6 +5,7 @@ export interface CompanyLayout {
     'Latitude': string | number;
     'Longitude': string | number;
     'Installer Type': string;
+    'Product Type': string;
     distanceToTarget: number;
 };
 

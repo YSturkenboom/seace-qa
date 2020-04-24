@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/static/css/main.d43c0664.css",
+    "main.js": "/static/js/main.ab187021.js",
+    "main.js.map": "/static/js/main.ab187021.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.e27ffece4fa809ad1ae403a63fe5e246.js": "/precache-manifest.e27ffece4fa809ad1ae403a63fe5e246.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.d43c0664.css.map": "/static/css/main.d43c0664.css.map",
+    "static/js/main.ab187021.js.LICENSE.txt": "/static/js/main.ab187021.js.LICENSE.txt",
+    "static/media/MapScreen.css": "/static/media/gmapsplaceholder.24a867ac.png"
+  },
+  "entrypoints": [
+    "static/css/main.d43c0664.css",
+    "static/js/main.ab187021.js"
+  ]
+}

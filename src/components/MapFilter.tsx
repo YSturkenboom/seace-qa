@@ -5,6 +5,8 @@ import { FilterTextField } from './form/FilterTextField';
 import { LocationCard } from './form/LocationCard';
 import { Search } from '@material-ui/icons';
 import { CompanyLayout, LocationLayout } from '../interfaces';
+import { GoogleMap } from "react-google-maps"
+
 
 interface Values {
     address: string;
@@ -16,6 +18,8 @@ interface Props {
     companies: Array<CompanyLayout> | null;
     loading: boolean;
     searchLocation: LocationLayout | null;
+    mapRef: React.RefObject<GoogleMap>;
+    setActivePlace: React.Dispatch<React.SetStateAction<string | null | undefined>>;
 }
 
 const distanceToTarget = (location: LocationLayout, locationTarget: LocationLayout) => {
@@ -26,11 +30,16 @@ const distanceToTarget = (location: LocationLayout, locationTarget: LocationLayo
     return Math.sqrt( a*a + b*b );
 };
 
-const filterCompanies = (companies: Array<CompanyLayout>, distance: number, searchLocation: LocationLayout, storeType: string, searchType: string): Array<CompanyLayout> => {
+const filterCompanies = (companies: Array<CompanyLayout>, distance: number, searchLocation: LocationLayout, storeType: string, productType: string, searchType: string): Array<CompanyLayout> => {
     // Filter on type first for performance
     let filteredCompanies = companies
-    if (searchType === 'advanced' && (storeType === 'For home' || storeType === 'For business')) {
-        filteredCompanies =  filteredCompanies.filter(c => c['Installer Type'] === storeType || c['Installer Type'] === 'For home & business');
+    if (searchType === 'advanced') {
+        if (storeType === 'For home' || storeType === 'For business') {
+            filteredCompanies =  filteredCompanies.filter(c => c['Installer Type'] === storeType || c['Installer Type'] === 'For home & business');
+        }
+        if (productType === 'Cooling' || productType === 'Heating') {
+            filteredCompanies =  filteredCompanies.filter(c => c['Product Type'] === productType || c['Product Type'] === 'Cooling & Heating');
+        }
     }
 
     // Calculate distance
@@ -51,19 +60,21 @@ const filterCompanies = (companies: Array<CompanyLayout>, distance: number, sear
     return filteredCompanies.filter(c => c.distanceToTarget <= distance);
 }
 
-export const Filter: React.FC<Props> = ({ onSubmit, loading, companies, searchLocation }) => {
+export const Filter: React.FC<Props> = ({ onSubmit, loading, companies, searchLocation, mapRef, setActivePlace }) => {
     const [distance, setDistance] = useState<number>(10);
     const [filteredCompanies, setFilteredCompanies] = useState(companies);
     const [searchType, setSearchType] = useState<'simple' | 'advanced'>('simple');
-    const [advDropDownIsOpen, setadvDropDownIsOpen] = useState<boolean>(true);
+    const [storeTypeDropDownIsOpen, setStoreTypeDropDownIsOpen] = useState<boolean>(true);
+    const [productTypeDropDownIsOpen, setProductTypeDropDownIsOpen] = useState<boolean>(true);
     const [storeType, setStoreType] = useState<string>('For home & business')
+    const [productType, setProductType] = useState<string>('Cooling & Heating');
 
     // Every filter change, or when companies load in
     useEffect(() => {
         if (companies && searchLocation) {
-            setFilteredCompanies(filterCompanies(companies, distance, searchLocation, storeType, searchType));
+            setFilteredCompanies(filterCompanies(companies, distance, searchLocation, storeType, productType, searchType));
         }
-    }, [distance, searchLocation, companies, storeType, searchType]);
+    }, [distance, searchLocation, companies, storeType, searchType, productType]);
 
     return (
         <Card raised className="map-search-box">
@@ -143,11 +154,13 @@ export const Filter: React.FC<Props> = ({ onSubmit, loading, companies, searchLo
 
             {searchType === 'advanced' &&
                 <div className="map-search-box-advanced">
-                    <p>Store Type</p>
-                    <Button onClick={() => setadvDropDownIsOpen(!advDropDownIsOpen)}>
-                        {advDropDownIsOpen ? '-' : '+'}
-                    </Button>
-                    {advDropDownIsOpen &&
+                    <div className="map-search-box-advanced-header">
+                        <p>Store Type</p>
+                        <Button onClick={() => setStoreTypeDropDownIsOpen(!storeTypeDropDownIsOpen)}>
+                            {storeTypeDropDownIsOpen ? '-' : '+'}
+                        </Button>
+                    </div>
+                    {storeTypeDropDownIsOpen &&
                         <RadioGroup onChange={e => setStoreType(e.target.value)} aria-label="position" name="position" defaultValue="For home and business">
                             <FormControlLabel
                                 value="For home"
@@ -169,7 +182,35 @@ export const Filter: React.FC<Props> = ({ onSubmit, loading, companies, searchLo
                             />
                         </RadioGroup>
                     }
-                </div>
+                    <div className="map-search-box-advanced-header">
+                        <p>Product Type</p>
+                        <Button onClick={() => setProductTypeDropDownIsOpen(!productTypeDropDownIsOpen)}>
+                            {productTypeDropDownIsOpen ? '-' : '+'}
+                        </Button>
+                    </div>
+                    {productTypeDropDownIsOpen &&
+                        <RadioGroup onChange={e => setProductType(e.target.value)} aria-label="position" name="position" defaultValue="Cooling & Heating">
+                            <FormControlLabel
+                                value="Cooling"
+                                control={<Radio color="primary" />}
+                                label="Cooling"
+                                labelPlacement="end"
+                            />
+                            <FormControlLabel
+                                value="Heating"
+                                control={<Radio color="primary" />}
+                                label="Heating"
+                                labelPlacement="end"
+                            />
+                            <FormControlLabel
+                                value='Cooling & Heating'
+                                control={<Radio color="primary" />}
+                                label="Cooling & Heating"
+                                labelPlacement="end"
+                            />
+                        </RadioGroup>
+                    }
+            </div>
             }
 
             <div className="map-search-box-footer">
@@ -177,14 +218,19 @@ export const Filter: React.FC<Props> = ({ onSubmit, loading, companies, searchLo
                     'Loading...'
                 ) : (
                     <div>
-                        {filteredCompanies && filteredCompanies.map(c =>
+                        {filteredCompanies ? filteredCompanies.map(c =>
                             <LocationCard
                                 name={c['Company name']}
                                 telephone={c['Phone number']}
                                 address={c['Street Address']}
                                 distance={c.distanceToTarget}
+                                mapRef={mapRef}
+                                lat={parseFloat(String(c['Latitude']))}
+                                lon={parseFloat(String(c['Longitude']))}
+                                setActivePlace={setActivePlace}
+                                installerType={c['Installer Type']}
                             />
-                        )}
+                        ) : "No installers found. Please broaden your search criteria"}
                     </div>
                 )}
             </div>

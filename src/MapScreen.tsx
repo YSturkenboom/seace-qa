@@ -1,28 +1,34 @@
 /// @ts-nocheck
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import './MapScreen.css';
 import { Filter } from './components/MapFilter'
 import { MapLegend } from './components/MapLegend'
 import { MapRegionIndicator } from './components/MapRegionIndicator';
 import { CompanyLayout, LocationLayout } from './interfaces';
-import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
+import { withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow } from "react-google-maps"
+import {ReactComponent as Home} from './home.svg';
+import {ReactComponent as Biz} from './biz.svg';
+import {ReactComponent as Both} from './both.svg';
+import { renderToStaticMarkup } from 'react-dom/server';
 
 const { GoogleSpreadsheet } = require('google-spreadsheet');
  
 const doc = new GoogleSpreadsheet('1QtCGUCN-_xZPLYExN3btHeXphRi4VI-uGABA87cHj-M');
 
 const REGION_TO_SHEET_MAP = {
-  'uk': 9
+  'UK': 9,
+  'Greece': 10,
+  'Spain': 1
 }
 
 function MapScreen() {
-  const [region, setRegion] = useState<string>('uk');
+  const [region, setRegion] = useState<string>('UK');
   const [companies, setCompanies] = useState<Array<CompanyLayout> | null>(null)
   const [loading, setLoading] = useState<boolean>(false);
-  const [centeredOn, setCenteredOn] = useState<LocationLayout | null>({lat: 50.8742724, lon: 0.6619475})
   const [searchLocation, setSearchLocation] = useState<LocationLayout | null>({lat: 50.8742724, lon: 0.6619475})
+  const [activePlace, setActivePlace] = useState<string | null>();
 
-  const mapRef = React.createRef();
+  const mapRef = React.createRef<React.RefObject<GoogleMap>>();
   const fetchGoogleSheet = async () => {
     await doc.useServiceAccountAuth(require('./SEACE Installer Locator-5a80e6b026be.json'));
   }
@@ -37,7 +43,7 @@ function MapScreen() {
       setLoading(true);
       await doc.loadInfo();
       console.log(doc.title);
-      const sheet = doc.sheetsByIndex[REGION_TO_SHEET_MAP['uk']]
+      const sheet = doc.sheetsByIndex[REGION_TO_SHEET_MAP[region]]
       const rows = await sheet.getRows();
       setCompanies(rows);
       console.log(rows);
@@ -57,21 +63,52 @@ function MapScreen() {
     fetchCompaniesForRegion(region);
   }, [region]);
 
-
   const MyMapComponent = withScriptjs(withGoogleMap((props) =>
     <GoogleMap
       defaultZoom={8}
       defaultCenter={{ lat: 51.8266266, lng: -2.2714084 }}
       ref={mapRef}
     >
-      {/* <Marker position={{ lat: 51.8266266, lng: -2.2714084 }} /> */}
       {companies && companies.map(c => {
         const productType = String(c['Product Type']).toLowerCase();
-        // const icon = productType === 'cooling' ? require('./cool.png') : require('./heat.png')
+        const position = { lat: parseFloat(String(c['Latitude'])), lng: parseFloat(String(c['Longitude'])) };
+        const installerType = String(c['Installer Type'])
+       
+        // Select icon based on the installer type
+        let icon;
+        if (installerType === 'For home') {
+            icon = <Home />;
+        } else if (installerType === 'For business') {
+            icon = <Biz />;
+        } else {
+            icon = <Both />;
+        }
+
         return <Marker 
-          position={{ lat: parseFloat(String(c['Latitude'])), lng: parseFloat(String(c['Longitude'])) }} 
-          onClick={() =>{ mapRef.current.panTo({ lat: parseFloat(String(c['Latitude'])), lng: parseFloat(String(c['Longitude'])) });}}// icon={{url: icon}}
-        />
+          position={position} 
+          onClick={() =>{
+            mapRef.current.panTo({ lat: parseFloat(String(c['Latitude'])), lng: parseFloat(String(c['Longitude'])) });
+            setActivePlace(c['Company name']);
+          }}
+          // icon={{url: `data:image/svg+xml,${encodeURIComponent(renderToStaticMarkup(icon))}`}}
+        >
+          {/* If this place is active, show the popup with the place information */}
+          {activePlace && activePlace === c['Company name'] &&
+            <InfoWindow>
+              <Fragment>
+                <p>{c['Company name']}</p>
+                <p>{c['Street Address']}</p>
+                <p>{c['City']}</p>
+                <p>{c['Installer Type']}</p>
+                <p>{c['Website']}</p>
+                <p>Contact Name: {c['Contact Name']}</p>
+                <p>{c['Email']}</p>
+                <p>{c['Phone number']}</p>
+              </Fragment>
+            </InfoWindow>
+          }
+          
+        </Marker>
       })}
       {/* <Marker position={{ lat: 51.8266266, lng: 150.644 }} /> */}
     </GoogleMap>
@@ -101,7 +138,7 @@ function MapScreen() {
           mapElement={<div style={{ height: `100%` }} />}
         >
         </MyMapComponent>
-        <Filter onSubmit={() => {}} loading={loading} companies={companies} searchLocation={searchLocation}/>
+        <Filter onSubmit={() => {}} loading={loading} companies={companies} searchLocation={searchLocation} mapRef={mapRef} setActivePlace={setActivePlace}/>
         <MapLegend isOpened={true}/>
         <MapRegionIndicator region={region}/>
       </div>
