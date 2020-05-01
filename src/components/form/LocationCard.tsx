@@ -14,6 +14,7 @@ interface LocationCardProps {
     lon: number;
     setActivePlace: React.Dispatch<React.SetStateAction<string | null | undefined>>;
     installerType: string;
+    distanceType: string;
 }
 
 const goToLocation = ({mapRef, lat, lon} : {mapRef: React.RefObject<GoogleMap>, lat: number, lon: number}) => {
@@ -22,7 +23,7 @@ const goToLocation = ({mapRef, lat, lon} : {mapRef: React.RefObject<GoogleMap>, 
     }
 }
 
-export const LocationCard: React.FC<LocationCardProps> = ({ lat, lon, name, address, telephone, distance, mapRef, setActivePlace, installerType }) => {
+export const LocationCard: React.FC<LocationCardProps> = ({ lat, lon, name, address, telephone, distance, mapRef, setActivePlace, installerType, distanceType }) => {
     let icon;
     if (installerType === 'For home') {
         icon = <Home />;
@@ -37,7 +38,11 @@ export const LocationCard: React.FC<LocationCardProps> = ({ lat, lon, name, addr
                 setActivePlace(name);
             }}>
                 <div className="map-search-location-info">
-                    <p className="map-search-location-info-title">{name}, {(Math.round((distance + Number.EPSILON) * 100) / 100).toString()} miles</p>
+                    { distanceType === 'mile' ?
+                        <p className="map-search-location-info-title">{name}, {Math.round((((distance + Number.EPSILON) * 100) / 100) * 2.5).toString()} miles</p>
+                    :
+                        <p className="map-search-location-info-title">{name}, {Math.round((((distance + Number.EPSILON) * 100) / 100) * 4).toString()} km</p>
+                    }
                     <p>{address}</p>
                     <p>Phone: <a href="tel:{telephone}">{telephone}</a></p>
                 </div>

@@ -17,8 +17,23 @@ export const MapRegionIndicator: React.FC<MapRegionProps> = ({ region, setRegion
     return (
         <Card raised className="map-region">
             <p className="">{"You're currently viewing store locations for " + region}</p>
-            <a href="">Not the right location?</a>
-            <Button onClick={() => setRegion("Greece")}>Test Greece</Button><Button onClick={() => setRegion("Spain")}>Test Spain</Button><Button onClick={() => setRegion("UK")}>Test UK</Button>
+            <a href="">Not the right location?</a><br></br>
+            <Button onClick={() => setRegion("Spain")}>Test Spain</Button><br></br>
+            <Button onClick={() => setRegion("Sweden")}>Test Sweden</Button><br></br>
+            <Button onClick={() => setRegion("Denmark")}>Test Denmark</Button><br></br>
+            <Button onClick={() => setRegion("Finland")}>Test Finland</Button><br></br>
+            <Button onClick={() => setRegion("Italy")}>Test Italy</Button><br></br>
+            <Button onClick={() => setRegion("Norway")}>Test Norway</Button><br></br>
+            <Button onClick={() => setRegion("SEROM")}>Test SEROM</Button><br></br>
+            <Button onClick={() => setRegion("France")}>Test France</Button><br></br>
+            <Button onClick={() => setRegion("UK")}>Test UK</Button><br></br>
+            <Button onClick={() => setRegion("Greece")}>Test Greece</Button><br></br>
+            <Button onClick={() => setRegion("Poland")}>Test Poland</Button><br></br>
+            <Button onClick={() => setRegion("Czech & Slovakia")}>Test Czech & Slovakia</Button><br></br>
+            <Button onClick={() => setRegion("Portugal")}>Test Portugal</Button><br></br>
+            <Button onClick={() => setRegion("Hungary")}>Test Hungary</Button><br></br>
+            <Button onClick={() => setRegion("SEAD")}>Test SEAD</Button><br></br>
+            <Button onClick={() => setRegion("SEB")}>Test SEB</Button><br></br>
             {/* <Menu
                 
                 id="lock-menu"

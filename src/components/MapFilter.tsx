@@ -20,61 +20,32 @@ interface Props {
     searchLocation: LocationLayout | null;
     mapRef: React.RefObject<GoogleMap>;
     setActivePlace: React.Dispatch<React.SetStateAction<string | null | undefined>>;
+    setDistance: React.Dispatch<React.SetStateAction<number | null | undefined>>;
+    distanceType: 'mile' | 'km';
+    setStoreType: React.Dispatch<React.SetStateAction<string | null | undefined>>;
+    setDistanceType: React.Dispatch<React.SetStateAction<string | null | undefined>>;
+    setProductType: React.Dispatch<React.SetStateAction<string | null | undefined>>;
+    searchType: string;
+    setSearchType: React.Dispatch<React.SetStateAction<string | null | undefined>>;
 }
 
-const distanceToTarget = (location: LocationLayout, locationTarget: LocationLayout) => {
-
-    // TODO: Replace with maps distance
-    var a = location.lat - locationTarget.lat;
-    var b = location.lon - locationTarget.lon;    
-    return Math.sqrt( a*a + b*b );
-};
-
-const filterCompanies = (companies: Array<CompanyLayout>, distance: number, searchLocation: LocationLayout, storeType: string, productType: string, searchType: string): Array<CompanyLayout> => {
-    // Filter on type first for performance
-    let filteredCompanies = companies
-    if (searchType === 'advanced') {
-        if (storeType === 'For home' || storeType === 'For business') {
-            filteredCompanies =  filteredCompanies.filter(c => c['Installer Type'] === storeType || c['Installer Type'] === 'For home & business');
-        }
-        if (productType === 'Cooling' || productType === 'Heating') {
-            filteredCompanies =  filteredCompanies.filter(c => c['Product Type'] === productType || c['Product Type'] === 'Cooling & Heating');
-        }
-    }
-
-    // Calculate distance
-    filteredCompanies = filteredCompanies.map(c => {
-        console.log({storeType: storeType, type: c['Installer Type']});
-        console.log({lat: parseFloat(String(c['Latitude'])), lon: parseFloat(String(c['Longitude']))});
-        
-        const location = {
-            lat: parseFloat(String(c['Latitude'])),
-            lon: parseFloat(String(c['Longitude']))
-        }
-        c.distanceToTarget = distanceToTarget(location, searchLocation);
-        return c;
-    })
-
-    // Filter on distance
-
-    return filteredCompanies.filter(c => c.distanceToTarget <= distance);
-}
-
-export const Filter: React.FC<Props> = ({ onSubmit, loading, companies, searchLocation, mapRef, setActivePlace }) => {
-    const [distance, setDistance] = useState<number>(10);
-    const [filteredCompanies, setFilteredCompanies] = useState(companies);
-    const [searchType, setSearchType] = useState<'simple' | 'advanced'>('simple');
+export const Filter: React.FC<Props> = ({ 
+    onSubmit,
+    loading,
+    companies,
+    searchLocation,
+    mapRef,
+    setActivePlace,
+    setDistance,
+    setStoreType,
+    distanceType,
+    setDistanceType,
+    setProductType,
+    searchType,
+    setSearchType
+}) => {
     const [storeTypeDropDownIsOpen, setStoreTypeDropDownIsOpen] = useState<boolean>(true);
     const [productTypeDropDownIsOpen, setProductTypeDropDownIsOpen] = useState<boolean>(true);
-    const [storeType, setStoreType] = useState<string>('For home & business')
-    const [productType, setProductType] = useState<string>('Cooling & Heating');
-
-    // Every filter change, or when companies load in
-    useEffect(() => {
-        if (companies && searchLocation) {
-            setFilteredCompanies(filterCompanies(companies, distance, searchLocation, storeType, productType, searchType));
-        }
-    }, [distance, searchLocation, companies, storeType, searchType, productType]);
 
     return (
         <Card raised className="map-search-box">
@@ -120,29 +91,43 @@ export const Filter: React.FC<Props> = ({ onSubmit, loading, companies, searchLo
                                     </Button>
                                 </div>
 
-                                <RadioGroup row onChange={e => setDistance(parseInt(e.target.value))}  aria-label="position" name="position" defaultValue="top" className="map-search-box-form-distance">
+                                <RadioGroup row onChange={e => setDistance(parseInt(e.target.value))}  aria-label="position" name="distance" defaultValue="10" className="map-search-box-form-distance">
                                     <FormControlLabel
-                                        value="0.1"
+                                        value="10"
                                         control={<Radio color="primary" />}
                                         label="1 mile"
                                         labelPlacement="top"
                                     />
                                     <FormControlLabel
-                                        value="2"
+                                        value="20"
                                         control={<Radio color="primary" />}
                                         label="2 miles"
                                         labelPlacement="top"
                                     />
                                     <FormControlLabel
-                                        value="5"
+                                        value="50"
                                         control={<Radio color="primary" />}
                                         label="5 miles"
                                         labelPlacement="top"
                                     />
                                     <FormControlLabel
-                                        value="10"
+                                        value="100"
                                         control={<Radio color="primary" />}
                                         label="10 miles"
+                                        labelPlacement="top"
+                                    />
+                                </RadioGroup>
+                                <RadioGroup row onChange={e => setDistanceType(e.target.value)} aria-label="position" name="type" defaultValue="km" className="map-search-box-form-distance">
+                                    <FormControlLabel
+                                        value="km"
+                                        control={<Radio color="primary" />}
+                                        label="km"
+                                        labelPlacement="top"
+                                    />
+                                    <FormControlLabel
+                                        value="mile"
+                                        control={<Radio color="primary" />}
+                                        label="miles"
                                         labelPlacement="top"
                                     />
                                 </RadioGroup>
@@ -218,12 +203,13 @@ export const Filter: React.FC<Props> = ({ onSubmit, loading, companies, searchLo
                     'Loading...'
                 ) : (
                     <div>
-                        {filteredCompanies ? filteredCompanies.map(c =>
+                        {companies ? companies.map(c =>
                             <LocationCard
                                 name={c['Company name']}
                                 telephone={c['Phone number']}
                                 address={c['Street Address']}
                                 distance={c.distanceToTarget}
+                                distanceType={distanceType}
                                 mapRef={mapRef}
                                 lat={parseFloat(String(c['Latitude']))}
                                 lon={parseFloat(String(c['Longitude']))}
