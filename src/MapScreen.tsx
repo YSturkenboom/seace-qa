@@ -218,7 +218,8 @@ function MapScreen() {
         <MyMapComponent
           className="map-screen"
           isMarkerShown={true}
-          googleMapURL="https://maps.googleapis.com/maps/api/js?client=gme-samsungsds&v=3.exp&libraries=geometry,drawing,places"
+          // googleMapURL="https://maps.googleapis.com/maps/api/js?client=gme-samsungsds&v=3.exp&libraries=geometry,drawing,places"
+          googleMapURL="https://maps.googleapis.com/maps/api/js&v=3.exp&libraries=geometry,drawing,places"
           loadingElement={<div style={{ height: `100%` }} />}
           containerElement={<div style={{ height: `100vh` }} />}
           mapElement={<div style={{ height: `100%` }} />}
