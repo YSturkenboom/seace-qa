@@ -54,7 +54,8 @@
 }
 
 .custom-radio span {
-  line-height: 1.9;
+  line-height: 2;
+  position: absolute;
 }
 
 .custom-radio div {
