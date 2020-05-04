@@ -16,6 +16,7 @@
     "google-spreadsheet": "^3.0.11",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-google-autocomplete": "^1.2.4",
     "react-google-maps": "^9.4.5",
     "react-scripts": "3.4.1",
     "rewire": "^5.0.0",

@@ -1,11 +1,15 @@
+/// @ts-nocheck
+
 import React, { useState, useEffect } from 'react';
 import { Button, Radio, Card, RadioGroup, FormControlLabel } from '@material-ui/core';
 import { Formik, Form, Field } from 'formik';
 import { FilterTextField } from './form/FilterTextField';
 import { LocationCard } from './form/LocationCard';
-import { Search } from '@material-ui/icons';
+import { Search, Place } from '@material-ui/icons';
 import { CompanyLayout, LocationLayout } from '../interfaces';
-import { GoogleMap } from "react-google-maps"
+import { GoogleMap, withScriptjs } from "react-google-maps"
+import Autocomplete from 'react-google-autocomplete';
+
 
 
 interface Values {
@@ -18,6 +22,7 @@ interface Props {
     companies: Array<CompanyLayout> | null;
     loading: boolean;
     searchLocation: LocationLayout | null;
+    setSearchLocation: React.Dispatch<React.SetStateAction<LocationLayout | null>>;
     mapRef: React.RefObject<GoogleMap>;
     setActivePlace: React.Dispatch<React.SetStateAction<string | null | undefined>>;
     setDistance: React.Dispatch<React.SetStateAction<number | null | undefined>>;
@@ -27,23 +32,30 @@ interface Props {
     setProductType: React.Dispatch<React.SetStateAction<string | null | undefined>>;
     searchType: string;
     setSearchType: React.Dispatch<React.SetStateAction<string | null | undefined>>;
+    language: string;
+    translation: any;
 }
 
-export const Filter: React.FC<Props> = ({ 
-    onSubmit,
-    loading,
-    companies,
-    searchLocation,
-    mapRef,
-    setActivePlace,
-    setDistance,
-    setStoreType,
-    distanceType,
-    setDistanceType,
-    setProductType,
-    searchType,
-    setSearchType
-}) => {
+export const Filter: React.FC<Props> = withScriptjs(
+    ({ 
+        onSubmit,
+        loading,
+        companies,
+        searchLocation,
+        setSearchLocation,
+        mapRef,
+        setActivePlace,
+        setDistance,
+        setStoreType,
+        distanceType,
+        setDistanceType,
+        setProductType,
+        searchType,
+        setSearchType,
+        language,
+        translation,
+        region
+    }) => {
     const [storeTypeDropDownIsOpen, setStoreTypeDropDownIsOpen] = useState<boolean>(true);
     const [productTypeDropDownIsOpen, setProductTypeDropDownIsOpen] = useState<boolean>(true);
 
@@ -80,12 +92,35 @@ export const Filter: React.FC<Props> = ({
                     {({ values }) => (
                         <Form className="map-search-box-form">
                                 <div className="map-search-box-form-search">
-                                    <Field
+                                    {/* <Field
                                         name="address"
                                         placeholder="Address or post code..."
                                         component={FilterTextField}
                                         className="map-search-box-form-search"
+                                    /> */}
+                                    <Autocomplete
+                                        className="map-search-box-form-search MuiInputBase-input MuiInput-input"
+                                        onPlaceSelected={(place) => {
+                                            if (place && place.geometry) { 
+                                                setSearchLocation({lat: place.geometry.location.lat(), lon: place.geometry.location.lng()});
+                                            }
+                                          }}
+                                        // types={['(regions)']}
+                                        types= {['address']}
                                     />
+                                    <Button className="clear-search" onClick={() => setSearchLocation(null)}>✕</Button>
+
+                                    {/* <Autocomplete
+                                        style={{
+                                            width: '100%',
+                                            height: '40px',
+                                            paddingLeft: '16px',
+                                            marginTop: '2px',
+                                            marginBottom: '500px'
+                                        }}
+                                        onPlaceSelected={onPlaceSelected}
+                                        types={['(regions)']}
+                                    /> */}
                                     <Button type="submit">
                                         <Search> </Search>
                                     </Button>
@@ -93,27 +128,33 @@ export const Filter: React.FC<Props> = ({
 
                                 <RadioGroup row onChange={e => setDistance(parseInt(e.target.value))}  aria-label="position" name="distance" defaultValue="10" className="map-search-box-form-distance">
                                     <FormControlLabel
+                                        value="1"
+                                        control={<Radio color="primary" />}
+                                        label="1"
+                                        labelPlacement="top"
+                                    />
+                                    <FormControlLabel
+                                        value="2"
+                                        control={<Radio color="primary" />}
+                                        label="2"
+                                        labelPlacement="top"
+                                    />
+                                    <FormControlLabel
+                                        value="5"
+                                        control={<Radio color="primary" />}
+                                        label="5"
+                                        labelPlacement="top"
+                                    />
+                                    <FormControlLabel
                                         value="10"
                                         control={<Radio color="primary" />}
-                                        label="1 mile"
+                                        label="10"
                                         labelPlacement="top"
                                     />
                                     <FormControlLabel
-                                        value="20"
+                                        value="25"
                                         control={<Radio color="primary" />}
-                                        label="2 miles"
-                                        labelPlacement="top"
-                                    />
-                                    <FormControlLabel
-                                        value="50"
-                                        control={<Radio color="primary" />}
-                                        label="5 miles"
-                                        labelPlacement="top"
-                                    />
-                                    <FormControlLabel
-                                        value="100"
-                                        control={<Radio color="primary" />}
-                                        label="10 miles"
+                                        label="25"
                                         labelPlacement="top"
                                     />
                                 </RadioGroup>
@@ -137,7 +178,7 @@ export const Filter: React.FC<Props> = ({
                 </Formik>
             </div>
 
-            {searchType === 'advanced' &&
+            {searchType === 'advanced' && 
                 <div className="map-search-box-advanced">
                     <div className="map-search-box-advanced-header">
                         <p>Store Type</p>
@@ -145,24 +186,24 @@ export const Filter: React.FC<Props> = ({
                             {storeTypeDropDownIsOpen ? '-' : '+'}
                         </Button>
                     </div>
-                    {storeTypeDropDownIsOpen &&
+                    {storeTypeDropDownIsOpen && translation &&
                         <RadioGroup onChange={e => setStoreType(e.target.value)} aria-label="position" name="position" defaultValue="For home and business">
                             <FormControlLabel
                                 value="For home"
                                 control={<Radio color="primary" />}
-                                label="For Home"
+                                label={translation["For home"]}
                                 labelPlacement="end"
                             />
                             <FormControlLabel
                                 value="For business"
                                 control={<Radio color="primary" />}
-                                label="For Business"
+                                label={translation["For business"]}
                                 labelPlacement="end"
                             />
                             <FormControlLabel
-                                value='For home & business'
+                                value="For home & business"
                                 control={<Radio color="primary" />}
-                                label="For Home & Business"
+                                label={translation['For home & business']}
                                 labelPlacement="end"
                             />
                         </RadioGroup>
@@ -178,19 +219,19 @@ export const Filter: React.FC<Props> = ({
                             <FormControlLabel
                                 value="Cooling"
                                 control={<Radio color="primary" />}
-                                label="Cooling"
+                                label={translation["Cooling"]}
                                 labelPlacement="end"
                             />
                             <FormControlLabel
                                 value="Heating"
                                 control={<Radio color="primary" />}
-                                label="Heating"
+                                label={translation["Heating"]}
                                 labelPlacement="end"
                             />
                             <FormControlLabel
-                                value='Cooling & Heating'
+                                value="Cooling & Heating"
                                 control={<Radio color="primary" />}
-                                label="Cooling & Heating"
+                                label={translation["Cooling & Heating"]}
                                 labelPlacement="end"
                             />
                         </RadioGroup>
@@ -203,7 +244,7 @@ export const Filter: React.FC<Props> = ({
                     'Loading...'
                 ) : (
                     <div>
-                        {companies ? companies.map(c =>
+                        {companies && companies.length ? companies.map(c =>
                             <LocationCard
                                 name={c['Company name']}
                                 telephone={c['Phone number']}
@@ -215,14 +256,15 @@ export const Filter: React.FC<Props> = ({
                                 lon={parseFloat(String(c['Longitude']))}
                                 setActivePlace={setActivePlace}
                                 installerType={c['Installer Type']}
+                                translation={translation}
                             />
-                        ) : "No installers found. Please broaden your search criteria"}
+                        ) : "No installers found. Please broaden your search criteria."}
                     </div>
                 )}
             </div>
         </Card>
     );
-}
+})
 
             /* <p>Text</p>
             <div>

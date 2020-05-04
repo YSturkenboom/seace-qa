@@ -15,6 +15,7 @@ interface LocationCardProps {
     setActivePlace: React.Dispatch<React.SetStateAction<string | null | undefined>>;
     installerType: string;
     distanceType: string;
+    translation: any;
 }
 
 const goToLocation = ({mapRef, lat, lon} : {mapRef: React.RefObject<GoogleMap>, lat: number, lon: number}) => {
@@ -23,7 +24,7 @@ const goToLocation = ({mapRef, lat, lon} : {mapRef: React.RefObject<GoogleMap>, 
     }
 }
 
-export const LocationCard: React.FC<LocationCardProps> = ({ lat, lon, name, address, telephone, distance, mapRef, setActivePlace, installerType, distanceType }) => {
+export const LocationCard: React.FC<LocationCardProps> = ({ lat, lon, name, address, telephone, distance, mapRef, setActivePlace, installerType, distanceType, translation }) => {
     let icon;
     if (installerType === 'For home') {
         icon = <Home />;
@@ -32,23 +33,27 @@ export const LocationCard: React.FC<LocationCardProps> = ({ lat, lon, name, addr
     } else {
         icon = <Both />;
     }
-        return (
-            <button className="map-search-location" onClick={() => { 
-                goToLocation({mapRef, lat, lon});
-                setActivePlace(name);
-            }}>
-                <div className="map-search-location-info">
-                    { distanceType === 'mile' ?
-                        <p className="map-search-location-info-title">{name}, {Math.round((((distance + Number.EPSILON) * 100) / 100) * 2.5).toString()} miles</p>
-                    :
-                        <p className="map-search-location-info-title">{name}, {Math.round((((distance + Number.EPSILON) * 100) / 100) * 4).toString()} km</p>
-                    }
-                    <p>{address}</p>
-                    <p>Phone: <a href="tel:{telephone}">{telephone}</a></p>
-                </div>
-                <div className="map-search-location-icons">
-                    {icon}
-                </div>
-            </button>
-        );
+    let distanceString;
+
+    if (distanceType === 'mile') {
+        distanceString = (Math.round(((distance / 1.609344) * 100)) / 100).toString() + ' miles';
+    } else {
+        distanceString = (Math.round(distance * 100) / 100).toString() + ' km';
+    }
+
+    return (
+        <button className="map-search-location" onClick={() => { 
+            goToLocation({mapRef, lat, lon});
+            setActivePlace(name);
+        }}>
+            <div className="map-search-location-info">
+                <p className="map-search-location-info-title">{name}{distance !== 0 && ', ' + distanceString}</p>
+                <p>{address}</p>
+                <p>Phone: <a href="tel:{telephone}">{telephone}</a></p>
+            </div>
+            <div className="map-search-location-icons">
+                {icon}
+            </div>
+        </button>
+    );
 }
