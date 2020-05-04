@@ -102,13 +102,13 @@ export const Filter: React.FC<Props> = withScriptjs(
                                         className="map-search-box-form-search MuiInputBase-input MuiInput-input"
                                         onPlaceSelected={(place) => {
                                             if (place && place.geometry) { 
-                                                setSearchLocation({lat: place.geometry.location.lat(), lon: place.geometry.location.lng()});
+                                                setSearchLocation({lat: place.geometry.location.lat(), lng: place.geometry.location.lng()});
                                             }
                                           }}
                                         // types={['(regions)']}
                                         types= {['address']}
                                     />
-                                    <Button className="clear-search" onClick={() => setSearchLocation(null)}>✕</Button>
+                                    {searchLocation && <Button className="clear-search" onClick={() => setSearchLocation(null)}>✕</Button>}
 
                                     {/* <Autocomplete
                                         style={{
@@ -126,7 +126,7 @@ export const Filter: React.FC<Props> = withScriptjs(
                                     </Button>
                                 </div>
 
-                                <RadioGroup row onChange={e => setDistance(parseInt(e.target.value))}  aria-label="position" name="distance" defaultValue="10" className="map-search-box-form-distance">
+                                <RadioGroup row onChange={e => setDistance(parseInt(e.target.value))} aria-label="position" name="distance" defaultValue="10" className="map-search-box-form-distance custom-radio">
                                     <FormControlLabel
                                         value="1"
                                         control={<Radio color="primary" />}
@@ -158,7 +158,7 @@ export const Filter: React.FC<Props> = withScriptjs(
                                         labelPlacement="top"
                                     />
                                 </RadioGroup>
-                                <RadioGroup row onChange={e => setDistanceType(e.target.value)} aria-label="position" name="type" defaultValue="km" className="map-search-box-form-distance">
+                                <RadioGroup row onChange={e => setDistanceType(e.target.value)} aria-label="position" name="type" defaultValue="km" className="mt-2 map-search-box-form-distance">
                                     <FormControlLabel
                                         value="km"
                                         control={<Radio color="primary" />}
@@ -171,7 +171,7 @@ export const Filter: React.FC<Props> = withScriptjs(
                                         label="miles"
                                         labelPlacement="top"
                                     />
-                                </RadioGroup>
+                            </RadioGroup>
                         </Form>
                     )}
                     
@@ -181,7 +181,7 @@ export const Filter: React.FC<Props> = withScriptjs(
             {searchType === 'advanced' && 
                 <div className="map-search-box-advanced">
                     <div className="map-search-box-advanced-header">
-                        <p>Store Type</p>
+                        <p>Installer Type</p>
                         <Button onClick={() => setStoreTypeDropDownIsOpen(!storeTypeDropDownIsOpen)}>
                             {storeTypeDropDownIsOpen ? '-' : '+'}
                         </Button>
@@ -239,13 +239,14 @@ export const Filter: React.FC<Props> = withScriptjs(
             </div>
             }
 
-            <div className="map-search-box-footer">
+            <div className="map-search-box-footer" style={searchType === 'advanced' ? {height: '130px'} : {}}>
                 {loading ? (
                     'Loading...'
                 ) : (
                     <div>
-                        {companies && companies.length ? companies.map(c =>
+                        {companies && companies.length ? companies.map((c, idx) =>
                             <LocationCard
+                                number={idx}
                                 name={c['Company name']}
                                 telephone={c['Phone number']}
                                 address={c['Street Address']}

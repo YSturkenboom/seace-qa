@@ -16,6 +16,7 @@ interface LocationCardProps {
     installerType: string;
     distanceType: string;
     translation: any;
+    number: number;
 }
 
 const goToLocation = ({mapRef, lat, lon} : {mapRef: React.RefObject<GoogleMap>, lat: number, lon: number}) => {
@@ -24,7 +25,7 @@ const goToLocation = ({mapRef, lat, lon} : {mapRef: React.RefObject<GoogleMap>, 
     }
 }
 
-export const LocationCard: React.FC<LocationCardProps> = ({ lat, lon, name, address, telephone, distance, mapRef, setActivePlace, installerType, distanceType, translation }) => {
+export const LocationCard: React.FC<LocationCardProps> = ({ lat, lon, name, address, telephone, distance, mapRef, setActivePlace, installerType, distanceType, number }) => {
     let icon;
     if (installerType === 'For home') {
         icon = <Home />;
@@ -53,6 +54,7 @@ export const LocationCard: React.FC<LocationCardProps> = ({ lat, lon, name, addr
             </div>
             <div className="map-search-location-icons">
                 {icon}
+                {typeof number !== 'undefined' && <p className="overlay-number">{number + 1}</p>}
             </div>
         </button>
     );

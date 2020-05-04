@@ -63,10 +63,15 @@ export const MapRegionIndicator: React.FC<MapRegionProps> = ({ region, setRegion
             </FormControl>
 
             <pre>
-                {searchLocation && searchLocation.lat}<br></br>
+                {JSON.stringify({
+                    searchLocation,
+                    translation: translation && translation['Language'],
+                    region
+                })}
+                {/* {searchLocation && searchLocation.lat}<br></br>
                 {searchLocation && searchLocation.lon}<br></br>
                 {translation && translation['Language']}<br></br>
-                {region && region}
+                {region && region} */}
             </pre>
             
             
