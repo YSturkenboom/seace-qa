@@ -21,8 +21,8 @@ export const MapRegionIndicator: React.FC<MapRegionProps> = ({ region, setRegion
         <Card raised className="map-region">
             <p className="">{"You're currently viewing store locations for " + region}</p>
             <a href="">Not the right location?</a><br></br>
-            <FormControl style={{width:'150px'}}>
-                <InputLabel id="demo-simple-select-label">Debug region</InputLabel>
+            <FormControl style={{width:'220px'}}>
+                <InputLabel id="demo-simple-select-label">Select a different region</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
@@ -45,8 +45,8 @@ export const MapRegionIndicator: React.FC<MapRegionProps> = ({ region, setRegion
                     <Button onClick={() => setRegion("SEB")}>Test SEB</Button><br></br>
                 </Select>
             </FormControl>
-            <FormControl style={{width:'150px'}}>
-                <InputLabel id="demo-simple-select-label">Debug language</InputLabel>
+            <FormControl style={{width:'220px'}}>
+                <InputLabel id="demo-simple-select-label">Select a different language</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
@@ -62,7 +62,7 @@ export const MapRegionIndicator: React.FC<MapRegionProps> = ({ region, setRegion
                 </Select>
             </FormControl>
 
-            <pre>
+            {/* <pre>
                 {JSON.stringify({
                     searchLocation,
                     translation: translation && translation['Language'],
@@ -71,8 +71,8 @@ export const MapRegionIndicator: React.FC<MapRegionProps> = ({ region, setRegion
                 {/* {searchLocation && searchLocation.lat}<br></br>
                 {searchLocation && searchLocation.lon}<br></br>
                 {translation && translation['Language']}<br></br>
-                {region && region} */}
-            </pre>
+                {region && region}
+            </pre> */}
             
             
             {/* <Menu

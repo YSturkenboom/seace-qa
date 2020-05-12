@@ -1,5 +1,6 @@
 /// @ts-nocheck
 import React, { useState, useEffect, Fragment } from 'react';
+// import { useParams } from 'react-router-dom';
 import './MapScreen.css';
 import { Filter } from './components/MapFilter'
 import { MapLegend } from './components/MapLegend'
@@ -64,6 +65,9 @@ const REGION_TO_COORDS_MAP = {
 }
 
 function MapScreen() {
+  // console.log('params', useParams());
+  
+
   const [region, setRegion] = useState<string>('UK');
   const [companies, setCompanies] = useState<Array<CompanyLayout> | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -172,7 +176,6 @@ function MapScreen() {
             }
             if (searchLocation) {
               c.distanceToTarget = distanceToTarget(location, searchLocation);
-              console.log(';HUHUHUH', distanceToTarget(location, searchLocation));
               
             } else {
               c.distanceToTarget = 0;
@@ -206,9 +209,9 @@ function MapScreen() {
           }
           radius={distanceType === 'mile' ? (1000 * distance) / 1.609344 : 1000 * distance}
           options={{
-            fillColor: "#4C90E38",
+            fillColor: "#8cd4ff",
             strokeWeight: 0,
-            fillOpacity: 0.1,
+            fillOpacity: 0.15,
           }}
         />
       }
@@ -283,15 +286,15 @@ function MapScreen() {
       <MyMapComponent
         className="map-screen"
         isMarkerShown={true}
-        // googleMapURL="https://maps.googleapis.com/maps/api/js?client=gme-samsungsds&v=3.exp&libraries=geometry,drawing,places"
-        googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+        googleMapURL="https://maps.googleapis.com/maps/api/js?client=gme-samsungsds&v=3.exp&libraries=geometry,drawing,places"
+        // googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
         loadingElement={<div style={{ height: `100%` }} />}
         containerElement={<div style={{ height: `100vh` }} />}
         mapElement={<div style={{ height: `100%` }} />}
       />
       <Filter
-        // googleMapURL="https://maps.googleapis.com/maps/api/js?client=gme-samsungsds&v=3.exp&libraries=geometry,drawing,places"
-        googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+        googleMapURL="https://maps.googleapis.com/maps/api/js?client=gme-samsungsds&v=3.exp&libraries=geometry,drawing,places"
+        // googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
         loadingElement={<div style={{ height: `100%` }} />}
         language={language}
         onSubmit={() => { }}
