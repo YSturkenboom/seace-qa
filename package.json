@@ -19,7 +19,7 @@
     "react-google-autocomplete": "^1.2.4",
     "react-google-maps": "^9.4.5",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.1",
+    "react-scripts": "5.0.1",
     "rewire": "^5.0.0",
     "typescript": "~3.7.2"
   },
